@@ -29,6 +29,9 @@ describe Oystercard do
   end
 
   describe '#in_journey?' do
+    context 'new oystercards' do
+      it { is_expected.not_to be_in_journey}
+    end
     context 'when touched in' do
       it "returns true" do
         subject.touch_in
@@ -38,10 +41,10 @@ describe Oystercard do
 
     context 'when touched out' do
       it "returns false" do
+        subject.touch_in
         subject.touch_out
         expect(subject).not_to be_in_journey
       end
     end
   end
-
 end
