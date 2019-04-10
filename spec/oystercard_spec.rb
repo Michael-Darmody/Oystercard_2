@@ -29,27 +29,38 @@ describe Oystercard do
   # end
 
   describe '#in_journey?' do
+  let(:station){ double(:station) }
+
     context 'new oystercards' do
       it { is_expected.not_to be_in_journey}
     end
-    context 'when touched in' do
-      it "returns true" do
+
+  describe '#touch_in' do
+    it "returns true" do
         subject.top_up(10)
-        subject.touch_in
+        subject.touch_in(station)
         expect(subject).to be_in_journey
-      end
-      it 'raises an error when balance is below 0' do
-        expect{ subject.touch_in }.to raise_error 'insufficient funds'
-      end
     end
-    context 'when touched out' do
-      it "returns false" do
+    it 'raises an error when balance is below 0' do
+        expect{ subject.touch_in(station) }.to raise_error 'insufficient funds'
+    end
+
+    it 'card remembers inital station where touched in' do
+        subject.top_up(10)
+        subject.touch_in(station)
+        expect(subject.entry_station).to eq station
+    end
+  end
+
+  describe '#touch_out' do
+    it "returns false" do
         subject.touch_out
         expect(subject).not_to be_in_journey
-      end
-    context 'when touching out, deducts fair from balance' do
-      it 'deducts 1 from balance' do
-        expect{ subject.touch_out }.to change{ subject.balance }.by -Oystercard::MIN_BALANCE
+    end
+
+      context 'when touching out, deducts fair from balance' do
+        it 'deducts 1 from balance' do
+            expect{ subject.touch_out }.to change{ subject.balance }.by -Oystercard::MIN_BALANCE
         end
       end
     end
