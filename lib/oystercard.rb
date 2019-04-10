@@ -11,7 +11,7 @@ MAX_BALANCE = 90
   end
 
   def top_up(amount)
-    fail "Max balance #{MAX_BALANCE} reached" if @balance + amount > MAX_BALANCE
+    raise "Max balance #{MAX_BALANCE} reached" if @balance + amount > MAX_BALANCE
     @balance += amount
   end
 
@@ -20,6 +20,7 @@ MAX_BALANCE = 90
   end
 
   def touch_in
+    raise 'insufficient funds' if @balance < 1
     @in_journey = true
   end
 

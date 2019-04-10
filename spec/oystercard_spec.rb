@@ -34,14 +34,16 @@ describe Oystercard do
     end
     context 'when touched in' do
       it "returns true" do
+        subject.top_up(10)
         subject.touch_in
         expect(subject).to be_in_journey
       end
+      it 'raises an error when balance is below 0' do
+        expect{ subject.touch_in }.to raise_error 'insufficient funds'
+      end
     end
-
     context 'when touched out' do
       it "returns false" do
-        subject.touch_in
         subject.touch_out
         expect(subject).not_to be_in_journey
       end
