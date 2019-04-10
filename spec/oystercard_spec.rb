@@ -21,12 +21,12 @@ describe Oystercard do
     end
   end
 
-  describe '#deduct' do
-    it "subtracts the journey amount from the balance" do
-      subject.top_up(50)
-      expect { subject.deduct(10) }.to change{ subject.balance }.by -10
-    end
-  end
+  # describe '#deduct' do
+  #   it "subtracts the journey amount from the balance" do
+  #     subject.top_up(50)
+  #     expect { subject.deduct(10) }.to change{ subject.balance }.by -10
+  #   end
+  # end
 
   describe '#in_journey?' do
     context 'new oystercards' do
@@ -46,6 +46,11 @@ describe Oystercard do
       it "returns false" do
         subject.touch_out
         expect(subject).not_to be_in_journey
+      end
+    context 'when touching out, deducts fair from balance' do
+      it 'deducts 1 from balance' do
+        expect{ subject.touch_out }.to change{ subject.balance }.by -Oystercard::MIN_BALANCE
+        end
       end
     end
   end
