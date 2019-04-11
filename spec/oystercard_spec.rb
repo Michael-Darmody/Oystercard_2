@@ -48,7 +48,7 @@ describe Oystercard do
     it 'card remembers inital station where touched in' do
         subject.top_up(Oystercard::MIN_BALANCE)
         subject.touch_in(station)
-        expect(subject.entry_station).to eq station
+        expect(subject.journey_history.last).to eq ({entry: station})
     end
   end
 
@@ -57,12 +57,15 @@ describe Oystercard do
       subject.top_up(Oystercard::MIN_BALANCE)
       subject.touch_in(station)
       subject.touch_out(station)
-      expect(subject.journey_history).to eq [{entry: station, exit: station}]
+      expect(subject.journey_history).to include ({entry: station, exit: station})
     end
 
       context 'when touching out, deducts fair from balance' do
         it 'deducts 1 from balance' do
-            expect{ subject.touch_out(station) }.to change{ subject.balance }.by -Oystercard::MIN_BALANCE
+          subject.top_up(Oystercard::MIN_BALANCE)
+          subject.touch_in(station)
+          subject.touch_out(station)
+          expect{ subject.touch_out(station) }.to change{ subject.balance }.by -Oystercard::MIN_BALANCE
         end
       end
     end
@@ -70,7 +73,7 @@ describe Oystercard do
 
   describe '#initialize' do
     it 'creates an empty journey_history array' do
-      expect(subject.journey_history).to eq([])
+      expect(subject.journey_history).to be_empty
     end
   end
 
