@@ -5,15 +5,12 @@ describe Station do
   let(:zone) { double :zone }
   let(:subject) { described_class.new(station, zone)}
 
-  describe '#name' do
-    it 'returns station name' do
-      expect(subject.name).to eq(station)
-    end
-  end
-
-  describe '#zone' do
-    it 'returns station zone' do
-      expect(subject.zone).to eq zone
-    end
-  end
-end
+  context 'on initialisation' do
+     it 'has a name instance variable' do
+       expect(subject.name).to eq station
+     end
+     it 'has a zone instance variable' do
+       expect(subject.zone).to eq zone
+     end
+   end
+ end
